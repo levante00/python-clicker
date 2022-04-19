@@ -17,6 +17,249 @@ ShowBudget.place(x = 10, y = 100)
 ShowBudget.config(text = f'{Budget}$')
 """
 
+#Achivement System Without Classes
+'''
+def Achivement1():
+    global TotalAmount
+    global Budget
+    global Window
+    global ShowBudget
+
+    A1 = Label(Window, text = "First 100 Dollar Achivement, You get 50 Dollars", height = 2, font = "bold", bg = "green")
+    A1.pack(side = BOTTOM)
+    Budget += 50
+    TotalAmount += 50
+    Window.itemconfig(ShowBudget, text = f"Budget = {Budget}$") 
+    Window.after(5000, A1.destroy)
+
+def Achivement2():
+    global TotalAmount
+    global Budget
+    global Window   
+    global ShowBudget
+
+
+    A2 = Label(Window, text = "First 1000 Dollar Achivement, You get 500 Dollars", height = 2, font = "bold", bg = "green")
+    A2.pack(side = BOTTOM)
+    Budget += 500
+    TotalAmount += 500
+    Window.itemconfig(ShowBudget, text = f"Budget = {Budget}$") 
+    Window.after(5000, A2.destroy)
+
+def Achivement3():
+    global TotalAmount
+    global Budget
+    global Window
+    global ShowBudget
+
+    A3 = Label(Window, text = "First 10000 Dollar Achivement, You get 5000 Dollars", height = 2, font = "bold", bg = "green")
+    A3.pack(side = BOTTOM)
+    Budget += 5000
+    TotalAmount += 5000
+    Window.itemconfig(ShowBudget, text = f"Budget = {Budget}$") 
+    Window.after(5000, A3.destroy)
+
+def Achivement4():
+    global TotalAmount
+    global Budget
+    global Window
+    global ShowBudget
+
+    A4 = Label(Window, text = "First 100000 Dollar Achivement, You get 50000 Dollars", height = 2, font = "bold", bg = "green")
+    A4.pack(side = BOTTOM)
+    Budget += 50000
+    TotalAmount += 50000
+    Window.itemconfig(ShowBudget, text = f"Budget = {Budget}$") 
+    Window.after(5000, A4.destroy)
+
+def Achivement5():
+    global TotalAmount
+    global Budget
+    global Window
+    global ShowBudget
+
+    A1 = Label(Window, text = "Total Money Amount 10000 Dollar Achivement, You get 3000 Dollars", height = 2, font = "bold", bg = "green")
+    A1.pack(side = BOTTOM)
+    Budget += 3000
+    TotalAmount += 3000
+    Window.itemconfig(ShowBudget, text = f"Budget = {Budget}$") 
+    Window.after(5000, A1.destroy)
+
+def Achivement6():
+    global TotalAmount
+    global Budget
+    global Window   
+    global ShowBudget
+
+    A2 = Label(Window, text = "First 100000 Dollar Achivement, You get 30000 Dollars", height = 2, font = "bold", bg = "green")
+    A2.pack(side = BOTTOM)
+    Budget += 30000
+    TotalAmount += 30000
+    Window.itemconfig(ShowBudget, text = f"Budget = {Budget}$") 
+    Window.after(5000, A2.destroy)
+
+def Achivement7():
+    global TotalAmount
+    global Budget
+    global Window
+    global ShowBudget
+
+    A3 = Label(Window, text = "First 1000000 Dollar Achivement, You get 300000 Dollars", height = 2, font = "bold", bg = "green")
+    A3.pack(side = BOTTOM)
+    Budget += 300000
+    TotalAmount += 300000
+    Window.itemconfig(ShowBudget, text = f"Budget = {Budget}$") 
+    Window.after(5000, A3.destroy)
+
+def Achivement8():
+    global TotalAmount
+    global Budget
+    global Window
+    global ShowBudget
+
+    A4 = Label(Window, text = "First 10000000 Dollar Achivement, You get 3000000 Dollars", height = 2, font = "bold", bg = "green")
+    A4.pack(side = BOTTOM)
+    Budget += 3000000
+    TotalAmount += 3000000
+    Window.itemconfig(ShowBudget, text = f"Budget = {Budget}$") 
+    Window.after(5000, A4.destroy)
+'''
+
+
+#Properties Buy Without Classes
+"""
+def BuyClicker():
+    global Budget
+    global Increase
+    global Running
+    global Window
+    global ShowBudget
+    global MoneyPerSecond
+    price = 50
+    adjust = 0.1
+    res = 0
+    if Increase == 0:
+        res = 1 #flag for first enter
+
+    if Budget >= price:
+        Budget = round(Budget - price, 2)
+        Increase = round(Increase + adjust, 2)
+        Window.itemconfig(ShowBudget, text = f'Budget = {Budget}$')
+        Window.itemconfig(MoneyPerSecond, text = f'Income = {Increase * 10}$ p.s')
+        if res == 1:
+            Running = True
+            AutoIncrease()
+
+def BuyShop():
+    global Budget
+    global Increase
+    global Running
+    global Window
+    global ShowBudget
+    global MoneyPerSecond
+    price = 1000
+    adjust = 5
+    res = 0
+    if Increase == 0:
+        res = 1 #flag for first enter
+
+    if Budget >= price:
+        Budget = round(Budget - price, 2)
+        Increase += adjust
+        Window.itemconfig(ShowBudget, text = f'Budget = {Budget}$') 
+        Window.itemconfig(MoneyPerSecond, text = f'Income = {Increase * 10}$ p.s')
+        if res == 1:
+            Running = True
+            AutoIncrease()
+
+def BuySuperMarket():
+    global Budget
+    global Increase
+    global Running
+    global Window
+    global ShowBudget
+    global MoneyPerSecond
+    price = 5000
+    adjust = 50
+    res = 0
+    if Increase == 0:
+        res = 1 #flag for first enter
+
+    if Budget >= price:
+        Budget = round(Budget - price, 2)
+        Increase = round(Increase + adjust, 2)
+        Window.itemconfig(ShowBudget, text = f'Budget = {Budget}$')
+        Window.itemconfig(MoneyPerSecond, text = f'Income = {Increase * 10}$ p.s')
+        if res == 1:
+            Running = True
+            AutoIncrease()
+def BuyFactory():
+    global Budget
+    global Increase
+    global Running
+    global Window
+    global ShowBudget
+    global MoneyPerSecond
+    price = 10000
+    adjust = 100
+    res = 0
+    if Increase == 0:
+        res = 1 #flag for first enter
+
+    if Budget >= price:
+        Budget = round(Budget - price, 2)
+        Increase = round(Increase + adjust, 2)
+        Window.itemconfig(ShowBudget, text = f'Budget = {Budget}$')
+        Window.itemconfig(MoneyPerSecond, text = f'Income = {Increase * 10}$ p.s')
+        if res == 1:
+            Running = True
+            AutoIncrease()
+
+def BuyBank():
+    global Budget
+    global Increase
+    global Running
+    global Window
+    global ShowBudget
+    global MoneyPerSecond
+    price = 50000
+    adjust = 500
+    res = 0
+    if Increase == 0:
+        res = 1 #flag for first enter
+
+    if Budget >= price:
+        Budget = round(Budget - price, 2)
+        Increase = round(Increase + adjust, 2)
+        Window.itemconfig(ShowBudget, text = f'Budget = {Budget}$')
+        Window.itemconfig(MoneyPerSecond, text = f'Income = {Increase * 10}$ p.s')
+        if res == 1:
+            Running = True
+            AutoIncrease()
+
+def BuyMoneyPrinter():
+    global Budget
+    global Increase
+    global Running
+    global Window
+    global ShowBudget
+    global MoneyPerSecond
+    price = 100000
+    adjust = 1000
+    res = 0
+    if Increase == 0:
+        res = 1 #flag for first enter
+
+    if Budget >= price:
+        Budget = round(Budget - price, 2)
+        Increase = round(Increase + adjust, 2)
+        Window.itemconfig(ShowBudget, text = f'Budget = {Budget}$')
+        Window.itemconfig(MoneyPerSecond, text = f'Income = {Increase * 10}$ p.s')
+        if res == 1:
+            Running = True
+            AutoIncrease()
+"""
+
 #Using Threades in Program
 """
 from tkinter import *

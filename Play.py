@@ -1,17 +1,18 @@
 from tkinter import *
 from tkinter import messagebox
+from Globals import Globals
 from PIL import Image, ImageTk
 import time
 
-TotalAmount = 0.0 # Total Money Amount 
-Budget = 0.0 # Current Money Amount
-Increase = 0.0 # Money Increase in 100 milliseconds 
-Running = False 
-Path1 = 'Data/background-3.jpg'
-Path2 = 'Data/MoneyBag.png' 
-AchiveRes1 = 0 # Flag for first 4 achivements to occur only once
-AchiveRes2 = 0 # Flag for 5 - 8 achivements to occur only once
-CaseRes = 0 # Flag for Clicker Mode to delete previous image
+TotalAmount = Globals.TotalAmount  
+Budget = Globals.Budget
+Increase = Globals.Increase 
+Running = Globals.Running
+Path1 = Globals.Path1
+Path2 = Globals.Path2
+AchiveRes1 = Globals.AchiveRes1
+AchiveRes2 = Globals.AchiveRes2
+CaseRes = Globals.CaseRes
 
 root = Tk()
 root.geometry('2000x1500')
@@ -31,16 +32,81 @@ ShowBudget = Window.create_text(350, 250, text = f'Budget = {Budget}$', font = (
 
 MoneyPerSecond = Window.create_text(350, 350, text = f'Income = {Increase * 10}$ p.s', font = ("helvetica", 20), fill = "white")
 
+class Achivement:
+	"""Class of all Achivements in the game"""
+	def __init__(self, Adjustment: int, Required_Budget: int = 0,  Required_TotalAmount: int = 0):
+		self.Adjustment = Adjustment
+		self.Required_Budget = Required_Budget	
+		self.Required_TotalAmount = Required_TotalAmount
+	
+	def Add(self):
+		"""Called when Required_Budget or Required_TotalAmount are 
+		satisfied. Increases Budget and TotalAmount by Object 
+		Adjustment"""
+		global Budget
+		global TotalAmount
+
+		if self.Required_TotalAmount == 0:
+			A = Label(Window, text = f'First {self.Required_Budget} Dollar Achivement, You get {self.Adjustment} Dollars', height = 2, font = "bold", bg = "green")
+		elif self.Required_Budget == 0:
+			A = Label(Window, text = f'Total Money Amount {self.Required_TotalAmount} Dollar Achivement, You get {self.Adjustment} Dollars', height = 2, font = "bold", bg = "green")
+		else:
+			raise Exeption("Wrong Class Creation") 
+			
+		A.pack(side = BOTTOM)
+		Budget += self.Adjustment
+		TotalAmount += self.Adjustment
+		Window.itemconfig(ShowBudget, text = f'Budget = {Budget}$')	
+		Window.after(5000, A.destroy)
+	
+Achivement1 = Achivement(50, 100)
+Achivement2 = Achivement(500, 1000)
+Achivement3 = Achivement(5000, 10000)
+Achivement4 = Achivement(50000, 100000)
+Achivement5 = Achivement(3000, 0 ,10000)
+Achivement6 = Achivement(30000, 0, 100000)
+Achivement7 = Achivement(300000, 0 ,1000000)
+Achivement8 = Achivement(3000000, 0 ,10000000)
+
+class Property:
+	"""Class of all AutoClickers"""
+	def __init__(self, Price: int, Adjust: int):
+		self.Price = Price
+		self.Adjust = Adjust
+	
+	def Buy(self):
+		"""Buy AutoClicker"""
+		global Budget
+		global Running
+		global Increase
+		res = 0
+		if Increase == 0:
+			res = 1 #flag for first enter
+
+		if Budget >= self.Price:
+			Budget = round(Budget - self.Price, 2)
+			Increase = round(Increase + self.Adjust, 2)
+			Window.itemconfig(ShowBudget, text = f'Budget = {Budget}$')
+			Window.itemconfig(MoneyPerSecond, text = f'Income = {Increase * 10}$ p.s')
+			if res == 1:
+				Running = True
+				AutoIncrease()
+	
+Clicker = Property(50, 0.1)
+Shop = Property(1000, 5)
+SuperMarket = Property(5000, 50)
+Factory = Property(10000, 100)
+Bank = Property(50000, 500)
+MoneyPrinter = Property(100000, 1000)
+	
 def New():
-	"""Restarts the Game"""
+	"""Restarts the Game, which means that it nullifies 
+	Budget, TotalAmount, Increase, return C1 button to 
+	starting possition and disables AutoIncrease function"""
 	global TotalAmount
 	global Budget
 	global Increase
 	global Running
-	global Window
-	global ShowBudget
-	global MoneyPerSecond
-	global C1
 
 	Begin = messagebox.askquestion('New Game', 'Start Again?', icon = 'question')
 	if Begin == "yes":
@@ -72,333 +138,80 @@ def Help():
 
 def Exit():
 	"""Bring window with option to close the program"""
-	global StopCond
+	global Running
 	Quit = messagebox.askquestion('Exit Game', 'Quit?', icon = 'question')
 	if Quit == "yes":
 		Running = False
 		Window.destroy()
 		root.destroy()
 
-def Achivement1():
-	global TotalAmount
+def CheckAchivement():
+	"""Checks for Achviement Requirements and if they are statisfied
+	increases the Budget and TotalAmount """
 	global Budget
-	global Window
-	global ShowBudget
-
-	A1 = Label(Window, text = "First 100 Dollar Achivement, You get 50 Dollars", height = 2, font = "bold", bg = "green")
-	A1.pack(side = BOTTOM)
-	Budget += 50
-	TotalAmount += 50
-	Window.itemconfig(ShowBudget, text = f'Budget = {Budget}$')	
-	Window.after(5000, A1.destroy)
-
-def Achivement2():
+	global AchiveRes1
+	global AchiveRes2
 	global TotalAmount
-	global Budget
-	global Window	
-	global ShowBudget
 
-	A2 = Label(Window, text = "First 1000 Dollar Achivement, You get 500 Dollars", height = 2, font = "bold", bg = "green")
-	A2.pack(side = BOTTOM)
-	Budget += 500
-	TotalAmount += 500
-	Window.itemconfig(ShowBudget, text = f'Budget = {Budget}$')	
-	Window.after(5000, A2.destroy)
-
-def Achivement3():
-	global TotalAmount
-	global Budget
-	global Window
-	global ShowBudget
-
-	A3 = Label(Window, text = "First 10000 Dollar Achivement, You get 5000 Dollars", height = 2, font = "bold", bg = "green")
-	A3.pack(side = BOTTOM)
-	Budget += 5000
-	TotalAmount += 5000
-	Window.itemconfig(ShowBudget, text = f'Budget = {Budget}$')	
-	Window.after(5000, A3.destroy)
-
-def Achivement4():
-	global TotalAmount
-	global Budget
-	global Window
-	global ShowBudget
-
-	A4 = Label(Window, text = "First 100000 Dollar Achivement, You get 50000 Dollars", height = 2, font = "bold", bg = "green")
-	A4.pack(side = BOTTOM)
-	Budget += 50000
-	TotalAmount += 50000
-	Window.itemconfig(ShowBudget, text = f'Budget = {Budget}$')	
-	Window.after(5000, A4.destroy)
-
-def Achivement5():
-	global TotalAmount
-	global Budget
-	global Window
-	global ShowBudget
-
-	A1 = Label(Window, text = "Total Money Amount 10000 Dollar Achivement, You get 3000 Dollars", height = 2, font = "bold", bg = "green")
-	A1.pack(side = BOTTOM)
-	Budget += 3000
-	TotalAmount += 3000
-	Window.itemconfig(ShowBudget, text = f'Budget = {Budget}$')	
-	Window.after(5000, A1.destroy)
-
-def Achivement6():
-	global TotalAmount
-	global Budget
-	global Window	
-	global ShowBudget
-
-	A2 = Label(Window, text = "First 100000 Dollar Achivement, You get 30000 Dollars", height = 2, font = "bold", bg = "green")
-	A2.pack(side = BOTTOM)
-	Budget += 30000
-	TotalAmount += 30000
-	Window.itemconfig(ShowBudget, text = f'Budget = {Budget}$')	
-	Window.after(5000, A2.destroy)
-
-def Achivement7():
-	global TotalAmount
-	global Budget
-	global Window
-	global ShowBudget
-
-	A3 = Label(Window, text = "First 1000000 Dollar Achivement, You get 300000 Dollars", height = 2, font = "bold", bg = "green")
-	A3.pack(side = BOTTOM)
-	Budget += 300000
-	TotalAmount += 300000
-	Window.itemconfig(ShowBudget, text = f'Budget = {Budget}$')	
-	Window.after(5000, A3.destroy)
-
-def Achivement8():
-	global TotalAmount
-	global Budget
-	global Window
-	global ShowBudget
-
-	A4 = Label(Window, text = "First 10000000 Dollar Achivement, You get 3000000 Dollars", height = 2, font = "bold", bg = "green")
-	A4.pack(side = BOTTOM)
-	Budget += 3000000
-	TotalAmount += 3000000
-	Window.itemconfig(ShowBudget, text = f'Budget = {Budget}$')	
-	Window.after(5000, A4.destroy)
+	if Budget >= Achivement1.Required_Budget and AchiveRes1 == 0:
+		AchiveRes1 += 1
+		Achivement1.Add()
+	elif Budget >= Achivement2.Required_Budget and AchiveRes1 == 1:
+		AchiveRes1 += 1
+		Achivement2.Add()
+	if Budget >= Achivement3.Required_Budget and AchiveRes1 == 2:
+		AchiveRes1 += 1
+		Achivement3.Add()
+	elif Budget >= Achivement4.Required_Budget and AchiveRes1 == 3:
+		AchiveRes1 += 1
+		Achivement4.Add()
+	elif TotalAmount >= Achivement5.Required_TotalAmount and AchiveRes2 == 0:
+		AchiveRes2 += 1
+		Achivement5.Add()
+	elif TotalAmount >= Achivement6.Required_TotalAmount and AchiveRes2 == 1:
+		AchiveRes2 += 1
+		Achivement6.Add()
+	elif TotalAmount >= Achivement7.Required_TotalAmount and AchiveRes2 == 2:
+		AchiveRes2 += 1
+		Achivement7.Add()
+	elif TotalAmount >= Achivement8.Required_TotalAmount and AchiveRes2 == 3:
+		AchiveRes2 += 1
+		Achivement8.Add()
 
 def AutoIncrease():
-	"""Increases the Budget and TotalAmount with depending on total adjustment"""
+	"""Increases the Budget and TotalAmount depending on total Increase"""
 	global Budget
 	global TotalAmount
 	global Increase
 	global Running
-	global Window
-	global ShowBudget		
-	global AchiveRes1
-	global AchiveRes2
-	
+
 	if Running is True:
 		Budget = round(Budget + Increase, 2)
-		TotalAmount = round(TotalAmount + Increase, 2)		
-		if Budget >= 100 and AchiveRes1 == 0:
-			AchiveRes1 += 1
-			Achivement1()
-		elif Budget >= 1000 and AchiveRes1 == 1:
-			AchiveRes1 += 1
-			Achivement2()
-		elif Budget >= 10000 and AchiveRes1 == 2:
-			AchiveRes1 += 1
-			Achivement3()
-		elif Budget >= 100000 and AchiveRes1 == 3:
-			AchiveRes1 += 1
-			Achivement4()
-		elif TotalAmount >= 10000 and AchiveRes2 == 0:
-			AchiveRes2 += 1
-			Achivement5()
-		elif TotalAmount >= 100000 and AchiveRes2 == 1:
-			AchiveRes2 += 1
-			Achivement6()
-		elif TotalAmount >= 1000000 and AchiveRes2 == 2:
-			AchiveRes2 += 1
-			Achivement7()
-		elif TotalAmount >= 10000000 and AchiveRes2 == 3:
-			AchiveRes2 += 1
-			Achivement8()
+		TotalAmount = round(TotalAmount + Increase, 2)
+		CheckAchivement()	
 		Window.itemconfig(ShowBudget, text = f'Budget = {Budget}$')	
 		Window.after(100, AutoIncrease)
 
 def Click():
-	"""Function to be called when the main button is clicked 
-	or when the 'space' key is pressed"""
+	"""Function that is called when the MoneyWad button is clicked 
+	or when the 'space' key is pressed. Its increasing the
+	Budget and TotalAmount by 1"""
 	global TotalAmount
 	global Budget
-	global Window
-	global ShowBudget
 	global AchiveRes1
 	global AchiveRes2
 
 	TotalAmount += 1
 	Budget += 1	
-	if Budget >= 100 and AchiveRes1 == 0:
-		AchiveRes1 += 1
-		Achivement1()
-	elif Budget >= 1000 and AchiveRes1 == 1:
-		AchiveRes1 += 1
-		Achivement2()
-	elif Budget >= 10000 and AchiveRes1 == 2:
-		AchiveRes1 += 1
-		Achivement3()
-	elif Budget >= 100000 and AchiveRes1 == 3:
-		AchiveRes1 += 1
-		Achivement4()
-	elif TotalAmount >= 10000 and AchiveRes2 == 0:
-		AchiveRes2 += 1
-		Achivement5()
-	elif TotalAmount >= 100000 and AchiveRes2 == 1:
-		AchiveRes2 += 1
-		Achivement6()
-	elif TotalAmount >= 1000000 and AchiveRes2 == 2:
-		AchiveRes2 += 1
-		Achivement7()
-	elif TotalAmount >= 10000000 and AchiveRes2 == 3:
-		AchiveRes2 += 1
-		Achivement8()	
+	CheckAchivement()
 	Window.itemconfig(ShowBudget, text = f'Budget = {Budget}$')	
 
-def BuyClicker():
-	global Budget
-	global Increase
-	global Running
-	global Window
-	global ShowBudget
-	global MoneyPerSecond
-	price = 50
-	adjust = 0.1
-	res = 0
-	if Increase == 0:
-		res = 1 #flag for first enter
-
-	if Budget >= price:
-		Budget = round(Budget - price, 2)
-		Increase = round(Increase + adjust, 2)
-		Window.itemconfig(ShowBudget, text = f'Budget = {Budget}$')
-		Window.itemconfig(MoneyPerSecond, text = f'Income = {Increase * 10}$ p.s')
-		if res == 1:
-			Running = True
-			AutoIncrease()
-
-def BuyShop():
-	global Budget
-	global Increase
-	global Running
-	global Window
-	global ShowBudget
-	global MoneyPerSecond
-	price = 1000
-	adjust = 5
-	res = 0
-	if Increase == 0:
-		res = 1 #flag for first enter
-
-	if Budget >= price:
-		Budget = round(Budget - price, 2)
-		Increase += adjust
-		Window.itemconfig(ShowBudget, text = f'Budget = {Budget}$')	
-		Window.itemconfig(MoneyPerSecond, text = f'Income = {Increase * 10}$ p.s')
-		if res == 1:
-			Running = True
-			AutoIncrease()
-
-def BuySuperMarket():
-	global Budget
-	global Increase
-	global Running
-	global Window
-	global ShowBudget
-	global MoneyPerSecond
-	price = 5000	
-	adjust = 50
-	res = 0
-	if Increase == 0:
-		res = 1 #flag for first enter
-
-	if Budget >= price:
-		Budget = round(Budget - price, 2)
-		Increase = round(Increase + adjust, 2)
-		Window.itemconfig(ShowBudget, text = f'Budget = {Budget}$')
-		Window.itemconfig(MoneyPerSecond, text = f'Income = {Increase * 10}$ p.s')
-		if res == 1:
-			Running = True
-			AutoIncrease()
-def BuyFactory():
-	global Budget
-	global Increase
-	global Running
-	global Window
-	global ShowBudget
-	global MoneyPerSecond
-	price = 10000	
-	adjust = 100
-	res = 0
-	if Increase == 0:
-		res = 1 #flag for first enter
-
-	if Budget >= price:
-		Budget = round(Budget - price, 2)
-		Increase = round(Increase + adjust, 2)
-		Window.itemconfig(ShowBudget, text = f'Budget = {Budget}$')
-		Window.itemconfig(MoneyPerSecond, text = f'Income = {Increase * 10}$ p.s')
-		if res == 1:
-			Running = True
-			AutoIncrease()
-
-def BuyBank():
-	global Budget
-	global Increase
-	global Running
-	global Window
-	global ShowBudget
-	global MoneyPerSecond
-	price = 50000
-	adjust = 500
-	res = 0
-	if Increase == 0:
-		res = 1 #flag for first enter
-
-	if Budget >= price:
-		Budget = round(Budget - price, 2)
-		Increase = round(Increase + adjust, 2)
-		Window.itemconfig(ShowBudget, text = f'Budget = {Budget}$')	
-		Window.itemconfig(MoneyPerSecond, text = f'Income = {Increase * 10}$ p.s')
-		if res == 1:
-			Running = True
-			AutoIncrease()
-
-def BuyMoneyPrinter():
-	global Budget
-	global Increase
-	global Running
-	global Window
-	global ShowBudget
-	global MoneyPerSecond
-	price = 100000	
-	adjust = 1000
-	res = 0
-	if Increase == 0:
-		res = 1 #flag for first enter
-
-	if Budget >= price:
-		Budget = round(Budget - price, 2)
-		Increase = round(Increase + adjust, 2)
-		Window.itemconfig(ShowBudget, text = f'Budget = {Budget}$')
-		Window.itemconfig(MoneyPerSecond, text = f'Income = {Increase * 10}$ p.s')
-		if res == 1:
-			Running = True
-			AutoIncrease()
-
 def Case1():
+	""" Function to be called when C1 button is pressed
+	that changes the MoneyWad button style and way that it
+	is working"""
 	global CaseRes
 	global MoneyWad
-	global Window
-	global C1
-	global C2
 	if CaseRes == 2:
 		MoneyWad.destroy()
 	CaseRes = 1
@@ -407,8 +220,11 @@ def Case1():
 	C2.config(state = NORMAL)
 	MoneyWad = Window.create_image(1000, 600, image = MoneyBag)
 	def set_state(state):
+		"""Changes MoneyWad button state to given one"""
 		Window.itemconfigure(MoneyWad, state=state)
 	def Appear():
+		"""Function called when MoneyWad button is pressed
+		that make button to disappear and appear in given time"""
 		set_state(HIDDEN)
 		Window.after(1, set_state, NORMAL)
 
@@ -416,11 +232,11 @@ def Case1():
 	root.bind("<space>", lambda event: (Appear(), Click()))
 
 def Case2():
+	""" Function that is called when C2 button is pressed
+	that changes the MoneyWad button style and way of it
+	is working"""
 	global CaseRes
 	global MoneyWad
-	global Window
-	global C1
-	global C2
 
 	if CaseRes == 1:
 		Window.delete(MoneyWad)	
@@ -434,13 +250,15 @@ def Case2():
 	MoneyWad = Button(Window, image = MoneyBag, height = ImageHeight, width = ImageWidth, command = Click, borderwidth = 10)
 	MoneyWad.place(x = 650, y = 220)
 	def Press_button(MoneyWad):
+		"""Function that imitates the way the Tkinter button motion 
+		when user click on it"""
 		MoneyWad.config(relief = "sunken")
 		root.update_idletasks()
 		MoneyWad.invoke()	
 		time.sleep(0.1)
 		MoneyWad.config(relief = "raised")
 	
-	root.bind("<space>", lambda event: Press_button(MoneyWad))
+	root.bind("<space>", lambda event: Press_button(MoneyWad)) #Enable pressing MoneyBag button with "space" key
 
 CheckVar1 = IntVar()
 C1 = Checkbutton(Window, text = 'Clicker Mode - 1', variable = CheckVar1, onvalue = 1, offvalue = 0, width = 15, command = Case1)
@@ -455,18 +273,18 @@ Menubar.add_command(label = "Help", command = Help)
 Menubar.add_command(label = "Exit", command = Exit)
 root.config(menu = Menubar)
 
-Clicker = Button(Window, text = "Clicker - 50$", command = BuyClicker)
-Shop = Button(Window, text = "Shop - 1000$", command = BuyShop) 
-SuperMarket = Button(Window, text = "SuperMarket - 5000$", command = BuySuperMarket)
-Factory = Button(Window, text = "Factory - 10000$", command = BuyFactory)
-Bank = Button(Window, text = "Bank - 50000$", command = BuyBank)
-MoneyPrinter = Button(Window, text = "MoneyPrinter - 100000$", command = BuyMoneyPrinter)
-Clicker.place(x = 1600, y = 10)
-Shop.place(x = 1600, y = 70)
-SuperMarket.place(x = 1600, y = 130)
-Factory.place(x = 1600, y = 190)
-Bank.place(x = 1600, y = 250)
-MoneyPrinter.place(x = 1600, y = 310)
+Clicker_Button = Button(Window, text = "Clicker - 50$", command = Clicker.Buy)
+Shop_Button = Button(Window, text = "Shop - 1000$", command = Shop.Buy) 
+SuperMarket_Button = Button(Window, text = "SuperMarket - 5000$", command = SuperMarket.Buy)
+Factory_Button = Button(Window, text = "Factory - 10000$", command = Factory.Buy)
+Bank_Button = Button(Window, text = "Bank - 50000$", command = Bank.Buy)
+MoneyPrinter_Button = Button(Window, text = "MoneyPrinter - 100000$", command = MoneyPrinter.Buy)
+Clicker_Button.place(x = 1600, y = 10)
+Shop_Button.place(x = 1600, y = 70)
+SuperMarket_Button.place(x = 1600, y = 130)
+Factory_Button.place(x = 1600, y = 190)
+Bank_Button.place(x = 1600, y = 250)
+MoneyPrinter_Button.place(x = 1600, y = 310)
 
 root.mainloop()
 
