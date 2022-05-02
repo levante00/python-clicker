@@ -1,3 +1,4 @@
+#Delete?
 class Globals:
 	"""Class of Globals used in the main program"""
 	TotalAmount = 0.0 # Total Money Amount 
