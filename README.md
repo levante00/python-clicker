@@ -25,6 +25,5 @@
 *   /Data - Repository which contains images that the game GUI uses
 *    main.py - file which contatains code that runs src/Play.py
 *    src/Play.py - file which contains whole program code
-*    src/Globals.py - file which used to contain global variables(Likely to be deleted soon, after review)
 *   src/trash.py - Contains code that the program does not actually use, but which may become useful in future 
     
