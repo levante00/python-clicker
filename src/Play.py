@@ -1,6 +1,5 @@
 from tkinter import *	
 from tkinter import messagebox
-from Globals import Globals
 from PIL import Image, ImageTk
 import time
 
