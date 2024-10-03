@@ -1,7 +1,7 @@
 from tkinter import *	
 from tkinter import messagebox
-import time
 from PIL import Image, ImageTk
+import time
 
 
 class CreateGUI(Tk):
@@ -62,9 +62,9 @@ class Achivement:
 		satisfied. Increases budget and total_amount by Object 
 		adjustment"""
 		TEXT_1 = (f'First {self.required_budget} Dollar Achivement,'
-				   ' You get {self.adjustment} Dollars')
+				   f' You get {self.adjustment} Dollars')
 		TEXT_2 = (f'Total Money Amount {self.required_total_amount} Dollar Achivement,' 
-				   ' You get {self.adjustment} Dollars')
+				   f' You get {self.adjustment} Dollars')
 		LABEL_HEIGHT = 2
 		DESTROY_DELAY = 5000
 
@@ -79,7 +79,7 @@ class Achivement:
 							   height = LABEL_HEIGHT, font = "bold",
 							   bg = "green")
 		else:
-			raise Exeption("Wrong Class Creation") 
+			raise Exception("Wrong Class Creation") 
 			
 		achive_label.pack(side = BOTTOM)
 		cls.budget += self.adjustment

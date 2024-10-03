@@ -1,29 +1,53 @@
-# Python_Project
-## Python Clicker Game
-    It is a simple Clicker game with some graphical interface
+# Python Clicker Game
+
+## Overview
+
+Very simple, interactive clicker game built with Python, featuring a graphical user interface powered by the `tkinter` package. The game allows players to earn points by clicking, purchase auto-clickers, and unlock achievements. 
 
 ## Gameplay
-    Player earn points for clicking on the button using cursor or by pressing  
-    the Space button. With earned point's player can buy autoclickers which will  
-    gain points automatically. There are two different modes of clicking effect  
-    view and Achievements which player earn during the game.  
 
-## Running the program(For Linux)
-* ### First Download python3.8
-    1. Open Terminal and use $ sudo apt-get update
-    2. $ sudo apt-get install python3.8
-* ### Then you should download pillow module
-    1. Open Terminal and use $ sudo apt-get install python3-pillow
-    2. If it shows that ImageTk does not exist try $ sudo apt-get install python3-pil python3-pil.imagetk
-* ### After that clone the repository on your local machine
-    1. Open Terminal and use $ git clone https://github.com/levante00/Python_Project.git
-* ### Finally run the main.py file from Python_Project repository
-    1. $ python3 main.py
+In this game, players earn points by clicking a button with the cursor or by pressing the spacebar. As points accumulate, players can purchase auto-clickers, which automatically generate points. The game also features two clicking modes and unlockable achievements.
 
-## All files and repositories
-*   /src - Repository which contain files with code
-*   /Data - Repository which contains images that the game GUI uses
-*    main.py - file which contatains code that runs src/Play.py
-*    src/Play.py - file which contains whole program code
 
-    
+## Running the Program (Linux)
+
+### Prerequisites:
+- Python 3.8 or higher
+- Pillow library
+
+### Steps:
+1. Install Python 3.8:
+   ```bash
+   sudo apt-get update
+   sudo apt-get install python3.8
+   ```
+
+2. Install the Pillow module:
+   ```bash
+   sudo apt-get install python3-pillow
+   ```
+
+   If you encounter issues with `ImageTk`, use the following command:
+   ```bash
+   sudo apt-get install python3-pil python3-pil.imagetk
+   ```
+
+3. Clone the repository:
+   ```bash
+   git clone https://github.com/levante00/Python_Project.git
+   ```
+
+4. Run the game:
+   ```bash
+   cd Python_Project
+   python3 main.py
+   ```
+
+
+
+## Project Structure
+
+- `/src`: Contains the main game logic files
+- `/Data`: Contains images and other resources used in the game
+- `main.py`: Entry point to run the game, links to `src/Play.py`
+- `src/Play.py`: Contains the core game code
